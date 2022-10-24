@@ -1,0 +1,4 @@
+No curso aprendi os conceitos fundamentais e práticos da ETL
+Os conceitos aplicados são baseados na linguagem Python
+em conjunto com a bibilioteca Pandas e Scikit-Learn
+onde adicionalmente fora aplicado o framework Luigi
