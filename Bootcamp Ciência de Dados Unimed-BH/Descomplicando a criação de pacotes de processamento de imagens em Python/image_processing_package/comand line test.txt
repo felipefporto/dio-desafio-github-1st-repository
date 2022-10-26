@@ -1,0 +1,8 @@
+from img_processing.utils import io, plot
+from img_processing.processing import combination, transformation
+image1 = io.read_image('C:\primeiro projeto git github\dio-desafio-github-1st-repository\Bootcamp Ciência de Dados Unimed-BH\Descomplicando a criação de pacotes de processamento de imagens em Python\image_processing_package\imagens_teste\img1.jpg')
+image2 = io.read_image('C:\primeiro projeto git github\dio-desafio-github-1st-repository\Bootcamp Ciência de Dados Unimed-BH\Descomplicando a criação de pacotes de processamento de imagens em Python\image_processing_package\imagens_teste\img2.jpg')
+plot.plot_image(image1)
+plot.plot_image(image2)
+result_image = combination.transfer_histogram(image1, image2)
+plot.plor_result(image1, image2, result_image)
