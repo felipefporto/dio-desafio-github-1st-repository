@@ -1,4 +1,4 @@
-# Primeiro desafio de projeto do Git e GitHub da dio.me
+# Primeiro desafio de projeto do Git e GitHub da dio.me para o bootcamp Ciência de Dados
 Repositório criado para estudo das funcionalidades do Git e GitHub, aulas ministradas pela dio.me, desafio de projeto.
 
 # Linked In
