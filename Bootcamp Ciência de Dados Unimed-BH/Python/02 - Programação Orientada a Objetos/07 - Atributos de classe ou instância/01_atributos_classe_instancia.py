@@ -5,7 +5,7 @@ class Estudante:
         self.nome = nome
         self.matricula = matricula
 
-    def __str__(self) -> str:
+    def __str__(self):
         return f"{self.nome} - {self.matricula} - {self.escola}"
 
 
