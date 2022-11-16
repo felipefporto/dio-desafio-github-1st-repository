@@ -1,22 +1,22 @@
--- create database company;
-create schema if not exists company;
-use company;
+-- Criando Database Company;
 
--- not suported by mysql
+CREATE SCHEMA IF NOT EXISTS company;
+USE company;
+
 -- create domain D_num as int check(D_num> 0 and D_num <21);
 
 CREATE TABLE employee(
-	Fname varchar(15) not null,
-    Minit char,
-    Lname varchar(15) not null,
-    Ssn char(9) not null, 
-    Bdate date,
-    Address varchar(30),
-    Sex char,
-    Salary decimal(10,2),
-    Super_ssn char(9),
-    Dno int not null,
-    constraint pk_employee primary key (Ssn)
+	Fname VARCHAR(15) NOT NULL,
+    Minit CHAR,
+    Lname VARCHAR(15) NOT NULL,
+    Ssn CHAR(9) NOT NULL, 
+    Bdate DATE,
+    Address VARCHAR(30),
+    Sex CHAR,
+    Salary DECIMAL(10,2),
+    Super_ssn CHAR(9),
+    Dno INT NOT NULL,
+    CONSTRAINT pk_employee PRIMARY KEY (Ssn)
 );
 
 -- alter table add, drop or modify
