@@ -87,6 +87,21 @@ SELECT * FROM project, works_on WHERE Pnumber = Pno;
 SELECT Pname, Essn, Fname, Hours 
 FROM project, works_on, employee 
 	WHERE Pnumber = Pno AND Essn = Ssn;
+    
+SHOW TABLES;
+DESC departament;
+DESC dept_locations;
+
+SELECT * FROM departament;
+SELECT * FROM dept_locations;
+
+-- Retira ambiguidade atráves do Alias ou AS Statement
+SELECT Dname, l.Dlocation AS Departament_name 
+	FROM departament AS d, dept_locations AS l
+	WHERE d.Dnumber = l.Dnumber;
+    
+SELECT concat(Fname, ' ', Lname) FROM employee;
+SELECT concat(Fname, ' ', Lname) AS Employee FROM employee;
 --
 --
 --
@@ -120,26 +135,31 @@ SELECT * FROM employee WHERE Dno IN (3,6,9);
 
 SELECT Bdate, Address
 FROM EMPLOYEE
-WHERE Fname = ‘John’ AND Minit = ‘B’ AND Lname = ‘Smith’;
+WHERE Fname = 'John' AND Minit = 'B' AND Lname = 'Smith';
 
 SELECT Fname, Lname, Address
-FROM EMPLOYEE, DEPARTMENT
-WHERE Dname = ‘Research’ AND Dnumber = Dno;
+FROM employee, departament
+WHERE Dname = 'Research' AND Dnumber = Dno;
 
 --
 --
 -- Expressões e alias
 --
---
-
 -- recolhendo o valor do INSS-*
 SELECT Fname, Lname, Salary, Salary*0.011 FROM employee;
 SELECT Fname, Lname, Salary, Salary*0.011 AS INSS FROM employee;
 SELECT Fname, Lname, Salary, round(Salary*0.011,2) AS INSS FROM employee;
 
 -- definir um aumento de salário para os gerentes que trabalham no projeto associado ao ProdutoX
-SELECT e.Fname, e.Lname, 1.1*e.Salary AS increased_sal FROM employee AS e,
-works_on AS w, project AS p WHERE e.Ssn = w.Essn AND w.Pno = p.Pnumber AND p.Pname='ProductX';
+DESC project;
+DESC works_on;
+SELECT * 
+	FROM employee AS e, works_on AS w, project AS p 
+    WHERE e.Ssn = w.Essn AND w.Pno = p.Pnumber;
+    
+SELECT concat(e.Fname,' ', e.Lname) AS Complete_name, round(1.1*e.Salary,2) AS increased_sal 
+	FROM employee AS e, works_on AS w, project AS p 
+    WHERE e.Ssn = w.Essn AND w.Pno = p.Pnumber AND p.Pname='ProductX';
 
 -- concatenando e fornecendo alias
 SELECT Dname AS Department, concat(Fname, ' ', Lname) AS Manager FROM departament d, dept_locations l, employee e
@@ -150,5 +170,5 @@ SELECT Fname, Lname, Address FROM employee, departament
 	WHERE Dname = 'Research' AND Dnumber = Dno;
 
 -- definindo alias para legibilidade da consulta
-SELECT e.Fname, e.Lname, e.Address FROM employee e, departament d
+SELECT concat(e.Fname,' ', e.Lname) AS Employee_name, e.Address FROM employee e, departament d
 	WHERE d.Dname = 'Research' AND d.Dnumber = e.Dno;
