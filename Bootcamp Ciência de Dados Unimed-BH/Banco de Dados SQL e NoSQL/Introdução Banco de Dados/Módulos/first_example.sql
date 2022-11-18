@@ -52,3 +52,36 @@ INSERT INTO favorite_food VALUES('0','Lasanha'),
 								('1','Macarrão');
                                 
 SELECT * FROM favorite_food;
+
+-- Union, Except, and Intersect
+
+USE first_example;
+CREATE TABLE R(
+A VARCHAR(2)
+);
+CREATE TABLE S(
+A varchar(2)
+);
+
+INSERT INTO R(A) VALUES ('a1'),('a2'),('a2'),('a3');
+INSERT INTO S(A) VALUES ('a1'),('a1'),('a2'),('a2'),('a2'),('a3'),('a4'),('a5');
+
+SELECT * FROM R;
+
+-- EXCEPT -> NOT IN
+SELECT * 
+FROM S 
+WHERE A NOT IN (SELECT A FROM R);
+
+-- INTERSECT
+SELECT R.A 
+FROM R 
+WHERE R.A IN (SELECT S.A FROM S);
+
+SELECT DISTINCT R.A 
+FROM R 
+WHERE R.A IN (SELECT S.A FROM S);
+
+-- UNION
+(SELECT DISTINCT R.A FROM R) UNION (SELECT DISTINCT S.A FROM S);
+(SELECT R.A FROM R) UNION (SELECT S.A FROM S); 

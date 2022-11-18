@@ -5,7 +5,7 @@ USE company;
 
 -- Criação de um domínio no MySQL não dá, ex: D_num faça uma checagem de números inteiros para (D_num> 0 and D_num <21);
 
-CREATE TABLE employee(
+CREATE TABLE IF NOT EXISTS employee(
 	Fname VARCHAR(15) NOT NULL,
     Minit CHAR,
     Lname VARCHAR(15) NOT NULL,
@@ -31,7 +31,7 @@ ALTER TABLE employee
 -- para dropar ALTER TABLE 'nome da tabela' DROP CONSTRAINT 'nome da chave'
 ALTER TABLE employee MODIFY Dno INT NOT NULL DEFAULT 1;
 
-CREATE TABLE departament(
+CREATE TABLE IF NOT EXISTS departament(
 	Dname VARCHAR(15) NOT NULL,
     Dnumber INT NOT NULL,
     Mgr_ssn CHAR(9) NOT NULL,
@@ -50,7 +50,7 @@ ALTER TABLE departament
 
 -- para modificar uma constraint primeiro dropamos
 
-CREATE TABLE dept_locations(
+CREATE TABLE IF NOT EXISTS dept_locations(
 	Dnumber INT NOT NULL,
 	Dlocation VARCHAR(15) NOT NULL,
     CONSTRAINT pk_dept_locations PRIMARY KEY (Dnumber, Dlocation)
@@ -63,7 +63,7 @@ ALTER TABLE dept_locations
 	ON DELETE CASCADE
     ON UPDATE CASCADE;
     
-CREATE TABLE project(
+CREATE TABLE IF NOT EXISTS project(
 	Pname VARCHAR(15) NOT NULL,
 	Pnumber INT NOT NULL,
     Plocation VARCHAR(15),
@@ -73,7 +73,7 @@ CREATE TABLE project(
     CONSTRAINT fk_project FOREIGN KEY (Dnum) REFERENCES departament(Dnumber)
 );
 
-CREATE TABLE works_on(
+CREATE TABLE IF NOT EXISTS works_on(
 	Essn CHAR(9) NOT NULL,
     Pno INT NOT NULL,
     Hours DECIMAL(3,1) NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE works_on(
     FOREIGN KEY (Pno) REFERENCES project(Pnumber)
 );
 
-CREATE TABLE dependent(
+CREATE TABLE IF NOT EXISTS dependent(
 	Essn CHAR(9) NOT NULL,
     dependent_name VARCHAR(255) NOT NULL,
     Sex CHAR,
@@ -94,3 +94,12 @@ CREATE TABLE dependent(
 
 SELECT * FROM information_schema.table_constraints 
 	WHERE (constraint_schema = 'company');
+
+-- DISTINCT 
+SELECT DISTINCT Pnumber, Fname
+FROM project, departament, employee
+WHERE Dnum = Dnumber AND Mgr_ssn = Ssn;
+
+SELECT Pnumber, Fname
+FROM project, departament, employee
+WHERE Dnum = Dnumber AND Mgr_ssn = Ssn AND Lname='Smith';

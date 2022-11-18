@@ -109,30 +109,45 @@ SELECT concat(Fname, ' ', Lname) AS Employee FROM employee;
 --
 --
 -- recuperando informações dos departamentos presentes em Stafford
-SELECT Dname AS Department, Mgr_ssn AS Manager FROM departament d, dept_locations l
+SELECT Dname AS Department, Mgr_ssn AS Manager, Dlocation 
+FROM departament d, dept_locations l
 WHERE d.Dnumber = l.Dnumber;
 
+-- recuperando gerente e departamento
+SELECT Dname AS Departament_name, concat(Fname,' ', Lname) AS Nome, Mgr_ssn AS Manager, Address
+FROM departament d, dept_locations l, employee e
+WHERE d.Dnumber = l.Dnumber AND Dlocation='Stafford' AND Mgr_ssn = e.Ssn;
+
 -- padrão sql -> || no MySQL usa a função concat()
-SELECT Dname AS Department, concat(Fname, ' ', Lname) FROM departament d, dept_locations l, employee e
+SELECT Dname AS Department, concat(Fname, ' ', Lname) 
+FROM departament d, dept_locations l, employee e
 WHERE d.Dnumber = l.Dnumber AND Mgr_ssn = e.Ssn;
 
 -- recuperando info dos projetos em Stafford
-SELECT * FROM project, departament WHERE Dnum = Dnumber AND Plocation = 'Stafford';
+SELECT * 
+FROM project, departament 
+WHERE Dnum = Dnumber AND Plocation = 'Stafford';
 
 -- recuperando info sobre os departamentos e projetos localizados em Stafford
+DESC project;
 SELECT Pnumber, Dnum, Lname, Address, Bdate
-FROM project, departament, employee
-WHERE Dnum = Dnumber AND Mgr_ssn = Ssn AND
+FROM project p, departament d, employee e
+WHERE p.Dnum = d.Dnumber AND Mgr_ssn = Ssn AND
 Plocation = 'Stafford';
 
-SELECT * FROM employee WHERE Dno IN (3,6,9);
+SELECT Pnumber, Dnum, Lname, Address, Bdate
+FROM project p, departament d, employee e
+WHERE p.Dnum = d.Dnumber AND Mgr_ssn = e.Ssn AND p.Plocation = 'Stafford';
+
+DESC employee;
+SELECT * 
+FROM employee 
+WHERE Dno IN (1,2,3,6,9);
 
 --
 --
 -- Operadores lógicos
 --
---
-
 SELECT Bdate, Address
 FROM EMPLOYEE
 WHERE Fname = 'John' AND Minit = 'B' AND Lname = 'Smith';
@@ -170,5 +185,27 @@ SELECT Fname, Lname, Address FROM employee, departament
 	WHERE Dname = 'Research' AND Dnumber = Dno;
 
 -- definindo alias para legibilidade da consulta
-SELECT concat(e.Fname,' ', e.Lname) AS Employee_name, e.Address FROM employee e, departament d
-	WHERE d.Dname = 'Research' AND d.Dnumber = e.Dno;
+SELECT concat(e.Fname,' ', e.Lname) AS Employee_name, e.Address 
+FROM employee e, departament d
+WHERE d.Dname = 'Research' AND d.Dnumber = e.Dno;
+    
+-- like e between
+
+SELECT *
+FROM employee;
+
+SELECT concat(Fname,' ', Lname) AS Complete_Name, Dname AS Department_Name
+FROM employee, departament
+WHERE Dno = Dnumber AND Address LIKE '%Houston%';
+
+SELECT concat(Fname,' ', Lname) AS Complete_Name, Address
+FROM employee
+WHERE Address LIKE '%Houston%';
+
+SELECT concat(Fname,' ', Lname) AS Complete_Name, Salary
+FROM employee
+WHERE (Salary >= 30000 AND Salary <= 40000);
+
+SELECT concat(Fname,' ', Lname) AS Complete_Name, Salary
+FROM employee
+WHERE (Salary BETWEEN 30000 AND 40000);
