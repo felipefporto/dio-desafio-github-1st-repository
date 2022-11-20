@@ -30,7 +30,7 @@ ALTER TABLE clients AUTO_INCREMENT = 1;
 
 -- tabela PJ
 CREATE TABLE clients_pj(
-	idPJ INT AUTO_INCREMENT,
+	idPJ INT,
     CNPJ CHAR(14) UNIQUE,
     Razao_social VARCHAR(45) NOT NULL,
     Inscricao_estadual CHAR(9),
@@ -44,7 +44,7 @@ ALTER TABLE clients_pj AUTO_INCREMENT = 1;
 
 -- tabela PF
 CREATE TABLE clients_pf(
-	idPF INT AUTO_INCREMENT,
+	idPF INT,
     CPF CHAR(11) NOT NULL UNIQUE,
     PRIMARY KEY (idPF, CPF),
     Fname VARCHAR(15) NOT NULL,
@@ -175,7 +175,7 @@ CREATE TABLE product_supplier(
 -- tabela vendedor terceirizado precisa ter MEI aberta
 CREATE TABLE seller(
 	idSeller INT AUTO_INCREMENT PRIMARY KEY,
-    Corporate_name VARCHAR(45) NOT NULL,
+    corporate_name VARCHAR(45) NOT NULL,
     CNPJ CHAR(14) NOT NULL UNIQUE,
     Inscricao_estadual CHAR(9),
     location VARCHAR(45) NOT NULL,
@@ -207,27 +207,27 @@ use ecommerce;
 show tables;
 desc clients_pj;
 -- idPJ, CNPJ (14), Razao_Social, Inscricao_estadual (9), email, telefone
-insert into clients_pj (CNPJ, Razao_social, Inscricao_estadual, email, telefone) 
-	   values('12345678911234','12354','123456789', 'teste@gmail.com', '1234561'),
-			 ('12345678911232','121354','123456788', 'teste1@gmail.com', '1234562'),
-             ('12345678911233','123254','123456787', 'teste2@gmail.com', '1234563'),
-             ('12345678911235','123534','123456786', 'teste3@gmail.com', '1234564'),
-             ('12345678911236','123544','123456785', 'teste4@gmail.com', '1234565'),
-             ('12345678911237','123554','123456784', 'teste5@gmail.com', '1234566'),
-             ('12345678911238','123564','123456783', 'teste6@gmail.com', '1234567'),
-             ('12345678911239','123574','123456782', 'teste7@gmail.com', '1234568');
+insert into clients_pj (idPJ,CNPJ, Razao_social, Inscricao_estadual, email, telefone) 
+	   values(4,'12345678911234','12354','123456789', 'teste@gmail.com', '1234561'),
+			 (6,'12345678911232','121354','123456788', 'teste1@gmail.com', '1234562'),
+             (7,'12345678911233','123254','123456787', 'teste2@gmail.com', '1234563');
+            -- ('12345678911235','123534','123456786', 'teste3@gmail.com', '1234564'),
+            -- ('12345678911236','123544','123456785', 'teste4@gmail.com', '1234565'),
+            -- ('12345678911237','123554','123456784', 'teste5@gmail.com', '1234566'),
+            -- ('12345678911238','123564','123456783', 'teste6@gmail.com', '1234567'),
+            -- ('12345678911239','123574','123456782', 'teste7@gmail.com', '1234568');
              
 desc clients_pf;
 -- idPF, CPF (11), Fname, Mname, Lname, Birth_date, email, telefone
-insert into clients_pf (CPF, Fname, Mname, Lname, Birth_date, email, telefone) 
-	   values('45678911234','Felipe','D', 'Oliveira', '1990-11-10', 'teste@gmail.com', '1234561'),
-			 ('45678911232','Luan','F', 'Martins', '1990-11-10','teste1@gmail.com', '1234562'),
-             ('45678911233','Higor','G', 'Gold', '1990-11-10','teste2@gmail.com', '1234563'),
-             ('45678911235','Luis','H', 'Santos', '1990-11-10','teste3@gmail.com', '1234564'),
-             ('45678911236','Gabriel','J', 'Correia', '1990-11-10','teste4@gmail.com', '1234565'),
-             ('45678911237','Janaína','K', 'Portugal', '1990-11-10','teste5@gmail.com', '1234566'),
-             ('45678911238','Juliane','L', 'Celeval', '1990-11-10','teste6@gmail.com', '1234567'),
-             ('45678911239','Larissa','U', 'Silva', '1990-11-10','teste7@gmail.com', '1234568');
+insert into clients_pf (idPF,CPF, Fname, Mname, Lname, Birth_date, email, telefone) 
+	   values(1,'45678911234','Felipe','D', 'Oliveira', '1990-11-10', 'teste@gmail.com', '1234561'),
+			 (2,'45678911232','Luan','F', 'Martins', '1990-11-10','teste1@gmail.com', '1234562'),
+             (3,'45678911233','Higor','G', 'Gold', '1990-11-10','teste2@gmail.com', '1234563'),
+             (5,'45678911235','Luis','H', 'Santos', '1990-11-10','teste3@gmail.com', '1234564'),
+             (8,'45678911236','Gabriel','J', 'Correia', '1990-11-10','teste4@gmail.com', '1234565');
+            -- ('45678911237','Janaína','K', 'Portugal', '1990-11-10','teste5@gmail.com', '1234566'),
+            -- ('45678911238','Juliane','L', 'Celeval', '1990-11-10','teste6@gmail.com', '1234567'),
+            -- ('45678911239','Larissa','U', 'Silva', '1990-11-10','teste7@gmail.com', '1234568');
 
 desc clients;             
 insert into clients (identification) 
@@ -335,41 +335,134 @@ insert into seller (Corporate_name, CNPJ, Inscricao_estadual, location, adress, 
 
 select * from seller;
 desc product_seller;
+
 insert into product_seller (idProd_seller, idProd_product, prod_quantity) values 
 						 (1,6,80),
                          (2,7,10);
 
-select * from product_seller;
+select * 
+from product_seller;
 
 select count(*) from clients;
 select count(*) from clients_pj;
 select count(*) from clients_pf;
-select * from clients c, orders o where c.idClient = idOrder;
+
+select * 
+from clients c, orders o 
+where c.idClient = idOrder;
 
 desc clients_pf;
-select Fname,Lname, idOrder, order_status from clients_pf c, orders o where c.idPF = idOrder;
-select concat(Fname,' ',Lname) as Client, idOrder as Request, order_status as Status from clients_pf c, orders o where c.idPF = idOrder;
+select Fname,Lname, idOrder, order_status 
+from clients_pf c, orders o 
+where c.idPF = idOrder;
+
+select concat(Fname,' ',Lname) as ClientS, idOrder as Request, order_status 
+from clients_pf c, orders o 
+where c.idPF = idOrder;
 
 desc orders;
 insert into orders (idOrder, order_status, order_description, Client_idClient, sendValue) values 
 							 (8, default,'compra via aplicativo', 8, default);
-                             
-select count(*) from clients_pf c, orders o 
-			where c.idPF = idOrder;
 
-select count(*) from clients_pj c, orders o 
-			where c.idPJ = idOrder;
+desc orders;                             
+select order_status 
+from clients_pf c, orders o 
+where c.idPF = idOrder;
 
-select * from orders;
+select count(*) 
+from clients_pj c, orders o 
+where c.idPJ = idOrder;
 
-desc details_order;
--- recuperação de pedido com produto associado
-select * from clients_pf c 
-				inner join orders o ON c.idPF = o.idOrder
-                inner join details_order p on p.idOrder = o.idOrder
-		group by idPF; 
+select * 
+from orders;
+
+desc product_seller;
+select * from location;
+desc product_supplier;
+desc location;
+
+--
+
+SELECT DISTINCT idProduct 
+FROM product
+WHERE idProduct IN
+	(SELECT DISTINCT idProduct FROM product_seller as se, product_supplier as su WHERE se.idProd_product = su.idProd_Product)
+    OR
+    idProduct IN (SELECT DISTINCT idProduct FROM location, product_seller as se WHERE idProduct = se.idProd_product);
+    
+--
+select * from product;
+SELECT Category, Price, Description_product, idProduct 
+FROM product
+WHERE Price = ANY (SELECT Price
+					FROM product 
+                    WHERE product_score = 5);
+                    
+SELECT Category, Price, Description_product, idProduct, product_score
+FROM product
+ORDER BY product_score DESC; 
+
+SELECT product_score, count(*)
+FROM product
+GROUP BY product_score
+HAVING count(*) >= 2; 
+
+-- recuperação de pedido com produto
+select * 
+from clients_pf c 
+	inner join orders o 
+    ON c.idPF = o.idOrder
+    inner join details_order p 
+    on p.idOrder = o.idOrder
+group by idPF; 
         
--- Recuperar quantos pedidos foram realizados pelos clientes?
-select c.idPF, Fname, count(*) as Number_of_orders from clients_pf c 
-				inner join orders o ON c.idPF = o.idOrder
-		group by idPF; 
+-- Recuperar quantos pedidos foram realizados pelos clientes
+select c.idPF, Fname, count(*) as Number_of_orders 
+from clients_pf c 
+	inner join orders o 
+    ON c.idPF = o.idOrder
+group by idPF;
+        
+-- Quantos pedidos foram feitos por cada cliente?
+
+SELECT idPF, CPF, count(*) 
+FROM clients_pf c, orders o 
+WHERE c.idPF = o.idOrder 
+GROUP BY idPF;
+
+SELECT idPJ, CNPJ, count(*) 
+FROM clients_pj c, orders o 
+WHERE c.idPJ = o.idOrder
+GROUP BY idPJ;
+
+-- Algum vendedor também é fornecedor?
+
+select * from supplier;
+select * from seller;
+
+SELECT * 
+FROM supplier AS su 
+INNER JOIN seller as se
+WHERE su.corporate_name = se.corporate_name;
+
+-- Relação de produtos fornecedores e estoques;
+
+select * from product;
+select * from product_supplier;
+select * from location;
+
+SELECT prod.idProduct, prod.product_name, su.idProd_Supplier, l.idProdStorage
+FROM product as prod
+INNER JOIN product_supplier as su ON idProduct = su.idProd_Product
+INNER JOIN location as l ON l.idProduct = su.idProd_Product;
+
+-- Relação de nomes dos fornecedores e nomes dos produtos;
+
+SELECT * FROM supplier;
+SELECT * FROM product_supplier;
+SELECT * FROM product;
+
+SELECT corporate_name, Description_product
+FROM supplier AS su
+INNER JOIN product_supplier ON idProd_Supplier = idSupplier
+INNER JOIN product ON idProd_Product = idProduct;
