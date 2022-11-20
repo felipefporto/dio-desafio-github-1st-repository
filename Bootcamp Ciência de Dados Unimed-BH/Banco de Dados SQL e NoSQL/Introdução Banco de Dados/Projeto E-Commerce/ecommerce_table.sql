@@ -24,6 +24,7 @@ CREATE TABLE clients(
 	identification VARCHAR(45),
     Payments_idPayment INT,
     CONSTRAINT fk_payment FOREIGN KEY (Payments_idPayment) REFERENCES payments(idPayment)
+    ON UPDATE CASCADE
 );
 ALTER TABLE clients AUTO_INCREMENT = 1;
 
