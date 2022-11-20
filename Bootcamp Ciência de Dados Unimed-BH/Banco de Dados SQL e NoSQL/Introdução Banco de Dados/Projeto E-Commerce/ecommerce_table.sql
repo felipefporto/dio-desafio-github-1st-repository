@@ -73,15 +73,15 @@ ALTER TABLE adress AUTO_INCREMENT = 1;
 
 -- tabela pedido
 CREATE TABLE orders(
-	idOrder INT auto_increment,
+	idOrder INT,
     order_status ENUM('Cancelado','Confirmado','Em processamento') default 'Em processamento',
     order_description VARCHAR(255),
     Client_idClient INT,
-    PRIMARY KEY (idOrder, Client_idClient, bank_status),
+    PRIMARY KEY (idOrder, Client_idClient),
     CONSTRAINT fk_order_client FOREIGN KEY (Client_idClient) REFERENCES clients(idClient),
     sendValue FLOAT DEFAULT 19.99,
-    bank_status ENUM('Cancelado','Confirmado','Em processamento'),
-    CONSTRAINT fk_bank_approvation FOREIGN KEY (bank_status) REFERENCES payments(bank_approvation),
+    -- bank_status ENUM('Cancelado','Confirmado','Em processamento'),
+    -- CONSTRAINT fk_bank_approvation FOREIGN KEY (bank_status) REFERENCES payments(bank_approvation),
     order_payment INT,
     CONSTRAINT fk_order_payment FOREIGN KEY (order_payment) REFERENCES payments(idPayment)
     ON UPDATE CASCADE
@@ -135,7 +135,7 @@ CREATE TABLE details_delivery(
 
 -- tabela estoque
 CREATE TABLE product_storage(
-	idProdStorage INT AUTO_INCREMENT PRIMARY KEY,
+	idProdStorage INT PRIMARY KEY,
     storageLocation varchar(255),
     SKU VARCHAR(45)
 );
@@ -201,3 +201,175 @@ use information_schema;
 show tables;
 desc referential_constraints;
 select * from referential_constraints where constraint_schema = 'ecommerce';
+
+-- inserção de dados e queries
+use ecommerce;
+show tables;
+desc clients_pj;
+-- idPJ, CNPJ (14), Razao_Social, Inscricao_estadual (9), email, telefone
+insert into clients_pj (CNPJ, Razao_social, Inscricao_estadual, email, telefone) 
+	   values('12345678911234','12354','123456789', 'teste@gmail.com', '1234561'),
+			 ('12345678911232','121354','123456788', 'teste1@gmail.com', '1234562'),
+             ('12345678911233','123254','123456787', 'teste2@gmail.com', '1234563'),
+             ('12345678911235','123534','123456786', 'teste3@gmail.com', '1234564'),
+             ('12345678911236','123544','123456785', 'teste4@gmail.com', '1234565'),
+             ('12345678911237','123554','123456784', 'teste5@gmail.com', '1234566'),
+             ('12345678911238','123564','123456783', 'teste6@gmail.com', '1234567'),
+             ('12345678911239','123574','123456782', 'teste7@gmail.com', '1234568');
+             
+desc clients_pf;
+-- idPF, CPF (11), Fname, Mname, Lname, Birth_date, email, telefone
+insert into clients_pf (CPF, Fname, Mname, Lname, Birth_date, email, telefone) 
+	   values('45678911234','Felipe','D', 'Oliveira', '1990-11-10', 'teste@gmail.com', '1234561'),
+			 ('45678911232','Luan','F', 'Martins', '1990-11-10','teste1@gmail.com', '1234562'),
+             ('45678911233','Higor','G', 'Gold', '1990-11-10','teste2@gmail.com', '1234563'),
+             ('45678911235','Luis','H', 'Santos', '1990-11-10','teste3@gmail.com', '1234564'),
+             ('45678911236','Gabriel','J', 'Correia', '1990-11-10','teste4@gmail.com', '1234565'),
+             ('45678911237','Janaína','K', 'Portugal', '1990-11-10','teste5@gmail.com', '1234566'),
+             ('45678911238','Juliane','L', 'Celeval', '1990-11-10','teste6@gmail.com', '1234567'),
+             ('45678911239','Larissa','U', 'Silva', '1990-11-10','teste7@gmail.com', '1234568');
+
+desc clients;             
+insert into clients (identification) 
+	   values('PF'),
+			 ('PF'),
+             ('PF'),
+             ('PJ'),
+             ('PF'),
+             ('PJ'),
+             ('PJ'),
+             ('PF');	
+
+desc product;
+-- idProduct, Category, Description_product, Price, disponibility, product_name, product_score, size
+insert into product (Category, Description_product, Price, disponibility, product_name, product_score, size) values
+							  ('Eletrônico','Fone de ouvido', 19.99, false, 'Fone de ouvido',4,null),
+                              ('Brinquedos','Barbie Elsa', 199.99, true, 'Barbie Elsa',3,null),
+                              ('Vestimenta','Body Carters', 290.00,true, 'Body Carters',5,null),
+                              ('Eletrônico','Microfone Vedo', 999.99,False, 'Microfone Vedo',4,null),
+                              ('Móveis','Sofá retrátil', 2999.99, False, 'Sofá retrátil', 3,'3x57x80'),
+                              ('Alimentos','Farinha de arroz', 4.99, False, 'Farinha de arroz', 2, null),
+                              ('Eletrônico','Fire Stick Amazon', 399.99, False, 'Fire Stick Amazon',3,null);
+
+select * from clients;
+select * from clients_pf;
+select * from clients_pj;
+select * from product;
+
+desc payments;
+-- bank_approvation, idPayment, Card_number, Expiration_date, Security_code (3), typePayment, limitAvailable
+INSERT INTO payments (Card_number, Expiration_date, Security_code, typePayment, limitAvailable) VALUES
+					('123456', '2030-11-10',123,'Cartão',9999),
+                    ('223456', '2031-11-10',123,'Cartão',99999),
+                    ('323456', '2032-11-10',123,'Boleto',999999),
+                    ('423456', '2033-11-10',123,'Dois Cartões',999999),
+                    ('523456', '2034-11-10',123,'Cartão',9999999),
+                    ('623456', '2035-11-10',123,'Cartão',999999),
+                    ('723456', '2036-11-10',123,'Cartão',99999);
+select * from payments;
+-- delete from orders where idOrderClient in  (1,2,3,4);
+desc orders;
+-- idOrder, order_status, order_description, sendValue
+insert into orders (idOrder, order_status, order_description, Client_idClient, sendValue) values 
+							 (1,'Confirmado', null, 1,default),
+                             (2,'Confirmado', null, 2,default),
+                             (3,'Cancelado',null, 3, default),
+                             (4,'Em processamento', null, 4, default),
+                             (5,'Em processamento', null, 5,default),
+                             (6,'Confirmado', null, 6,default),
+                             (7,'Cancelado',null, 7,default);
+
+-- quantity, date_order, total_value, details_order_status
+select * from orders;
+desc details_order;
+insert into details_order (idProduct, idOrder, quantity, date_order, total_value, details_order_status) values
+						 (1,1,1,'2022-10-10',201,default),
+                         (2,2,1,'2022-10-10',202,default),
+                         (3,3,1,'2022-10-10',203,default),
+                         (4,4,1,'2022-10-10',204,default),
+                         (5,5,1,'2022-10-10',205,default),
+                         (6,6,1,'2022-10-10',206,default),
+                         (7,7,1,'2022-10-10',207,default);
+
+show tables;
+desc product_storage;
+-- storageLocation,quantity
+insert into product_storage (idProdStorage, storageLocation, SKU) values 
+							(1,'Rio de Janeiro',1000),
+                            (2,'Rio de Janeiro',500),
+                            (3,'São Paulo',10),
+                            (4,'São Paulo',100),
+                            (5,'São Paulo',10),
+                            (6,'Brasília',60);
+
+show tables;
+desc location;
+insert into location (idProdStorage, idProduct, quantity) values (1,1,1);
+insert into location (idProdStorage, idProduct, quantity) values (2,2,2);
+insert into location (idProdStorage, idProduct, quantity) values (3,3,3);
+insert into location (idProdStorage, idProduct, quantity) values (4,4,4);
+insert into location (idProdStorage, idProduct, quantity) values (5,5,5);
+insert into location (idProdStorage, idProduct, quantity) values (6,6,6);
+
+desc supplier;
+insert into supplier (corporate_name, CNPJ, Inscricao_estadual,email,contact) values 
+							('Almeida e filhos', 12345678912346,'219854734', 'teste@teste.com','123456'),
+                            ('Eletrônicos Silva',85451964914457,'219854844', 'teste1@teste.com','223256'),
+                            ('Eletrônicos Valma', 93456789934695,'219755474', 'teste2@teste.com','323456');
+                            
+select * from supplier;
+
+desc product_supplier;
+insert into product_supplier (idProd_Supplier, idProd_Product, quantity) values
+						 (1,1,500),
+                         (1,2,400),
+                         (2,4,633),
+                         (3,3,5),
+                         (2,5,10);
+
+desc seller;
+insert into seller (Corporate_name, CNPJ, Inscricao_estadual, location, adress, email, telefone) values 
+						('Tech eletronics', 12456789456321, null, 'Rio de Janeiro','adress 1', 'teste@teste', 219946287),
+					    ('Botique Durgas',11156789456311,123456783,'Rio de Janeiro', 'adress 2', 'teste@teste', 219567895),
+						('Kids World',45678912654485,null,'São Paulo', 1198657484, 'adress 3', 'ateste@teste, 2343545346');
+
+select * from seller;
+desc product_seller;
+insert into product_seller (idProd_seller, idProd_product, prod_quantity) values 
+						 (1,6,80),
+                         (2,7,10);
+
+select * from product_seller;
+
+select count(*) from clients;
+select count(*) from clients_pj;
+select count(*) from clients_pf;
+select * from clients c, orders o where c.idClient = idOrder;
+
+desc clients_pf;
+select Fname,Lname, idOrder, order_status from clients_pf c, orders o where c.idPF = idOrder;
+select concat(Fname,' ',Lname) as Client, idOrder as Request, order_status as Status from clients_pf c, orders o where c.idPF = idOrder;
+
+desc orders;
+insert into orders (idOrder, order_status, order_description, Client_idClient, sendValue) values 
+							 (8, default,'compra via aplicativo', 8, default);
+                             
+select count(*) from clients_pf c, orders o 
+			where c.idPF = idOrder;
+
+select count(*) from clients_pj c, orders o 
+			where c.idPJ = idOrder;
+
+select * from orders;
+
+desc details_order;
+-- recuperação de pedido com produto associado
+select * from clients_pf c 
+				inner join orders o ON c.idPF = o.idOrder
+                inner join details_order p on p.idOrder = o.idOrder
+		group by idPF; 
+        
+-- Recuperar quantos pedidos foram realizados pelos clientes?
+select c.idPF, Fname, count(*) as Number_of_orders from clients_pf c 
+				inner join orders o ON c.idPF = o.idOrder
+		group by idPF; 
